@@ -1,0 +1,65 @@
+---
+description: Flutter feature-first architecture + Riverpod + Material 3 UI rules
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# Flutter Architecture & UI Rules (Strict)
+
+## Architecture (feature-first + clean layers)
+
+- Use **feature-first** structure:
+  - `lib/core/{theme,constants,widgets}`
+  - `lib/features/<feature>/{presentation,application,domain,data}`
+- **Never mix** UI, business logic, and API/repository code in the same file.
+- **UI code** must exist **only** in `presentation/`.
+- **Business logic** belongs in `domain/` and `application/`.
+- **API + repositories + data sources** belong in `data/`.
+
+## State management (Riverpod)
+
+- Use **Riverpod** for state management.
+- Do **not** use `setState` for business logic.
+- Keep **providers** inside `lib/features/<feature>/application/`.
+- UI should **consume providers only** (no direct repository/API calls from UI).
+
+## UI structure (Screen → Scaffold → Sections → Components)
+
+- Every screen must follow:
+  - `Screen` → `Scaffold` → `AppBar`, `body`, `bottomNavigationBar`/`floatingActionButton` (if needed)
+- `body` must start with **Padding** as the first child.
+- Screens must be **thin**: compose UI using **Section widgets** (block-level) in separate files.
+- Sections should be reusable and may be composed from small **Component widgets**.
+- Avoid deeply nested widget trees; keep `build()` clean.
+- Never create massive widgets (target <300 lines per widget file).
+
+## Design system (Material 3 + theming)
+
+- Use **Material 3**:
+  - `useMaterial3: true`
+  - `colorScheme: ColorScheme.fromSeed(...)`
+- Do **not hardcode colors** in widgets. Use `Theme.of(context).colorScheme`.
+- Typography:
+  - Use **GoogleFonts** via `ThemeData.textTheme`.
+  - Do **not** invent random font sizes; follow Material typography scale.
+- Spacing:
+  - Follow **8pt spacing system** only: `4, 8, 12, 16, 24, 32, 40, 48`.
+- Border radius:
+  - Use consistent radius values only: `8`, `12`, or `16`.
+
+## ScreenUtil usage
+
+- Use `flutter_screenutil` for:
+  - font size: `.sp`
+  - padding/margin: `.w`, `.h`
+- Do **not** scale:
+  - AppBar height
+  - default icon sizes
+  - system UI elements
+
+## Animation (flutter_animate)
+
+- Use `flutter_animate` for micro-interactions only.
+- Duration: **200–400ms**.
+- Prefer **fade + slight slide**; do not overuse animations.
+
