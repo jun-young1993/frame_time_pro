@@ -118,7 +118,7 @@ class TimecodeCalculatorState {
   final int resultAnimationNonce;
 
   String get statusFpsLabel =>
-      'FPS: ${fpsMode.label}${isDropFrame ? ' DF' : 'NDF'}';
+      'FPS: ${fpsMode.label}${isDropFrame ? ' DF' : ' NDF'}';
 
   String get statusModeLabel => conversionMode.label;
 
@@ -144,9 +144,9 @@ class TimecodeCalculatorState {
     );
   }
 
-  static const initial = TimecodeCalculatorState(
+  static final initial = TimecodeCalculatorState(
     fpsMode: FpsMode.fps29_97,
-    isDropFrame: false,
+    isDropFrame: FpsMode.fps29_97.allowsDropFrame,
     conversionMode: ConversionMode.frameToTimecode,
     inputA: TimecodeInputModel.empty,
     frameInput: '',

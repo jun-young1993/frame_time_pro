@@ -40,19 +40,15 @@ class TimecodeSegments {
 
   static const empty = TimecodeSegments(hh: '', mm: '', ss: '', ff: '');
 
-  bool get isComplete => hh.length == 2 && mm.length == 2 && ss.length == 2 && ff.length == 2;
+  bool get isComplete =>
+      hh.length == 2 && mm.length == 2 && ss.length == 2 && ff.length == 2;
 
   String display({required bool isDropFrame}) {
     final sep = isDropFrame ? ';' : ':';
     return '${_disp2(hh)}:${_disp2(mm)}:${_disp2(ss)}$sep${_disp2(ff)}';
   }
 
-  TimecodeSegments copyWith({
-    String? hh,
-    String? mm,
-    String? ss,
-    String? ff,
-  }) {
+  TimecodeSegments copyWith({String? hh, String? mm, String? ss, String? ff}) {
     return TimecodeSegments(
       hh: hh ?? this.hh,
       mm: mm ?? this.mm,
@@ -76,10 +72,7 @@ class TimecodeIssue {
 
 @immutable
 class TimecodeValidation {
-  const TimecodeValidation({
-    required this.timecode,
-    required this.issue,
-  });
+  const TimecodeValidation({required this.timecode, required this.issue});
 
   final Timecode? timecode;
   final TimecodeIssue? issue;
@@ -97,8 +90,9 @@ TimecodeValidation validateTimecode({
     return TimecodeValidation(
       timecode: null,
       issue: treatIncompleteAsIssue
-          ? const TimecodeIssue(
-              message: 'Incomplete timecode.',
+          ? TimecodeIssue(
+              message:
+                  'Incomplete timecode: ${segments.display(isDropFrame: isDropFrame)}',
               severity: TimecodeIssueSeverity.error,
             )
           : null,
@@ -113,20 +107,29 @@ TimecodeValidation validateTimecode({
   if (hours == null || minutes == null || seconds == null || frames == null) {
     return const TimecodeValidation(
       timecode: null,
-      issue: TimecodeIssue(message: 'Invalid digits.', severity: TimecodeIssueSeverity.error),
+      issue: TimecodeIssue(
+        message: 'Invalid digits.',
+        severity: TimecodeIssueSeverity.error,
+      ),
     );
   }
 
   if (minutes < 0 || minutes > 59) {
     return const TimecodeValidation(
       timecode: null,
-      issue: TimecodeIssue(message: 'Minutes must be 00–59.', severity: TimecodeIssueSeverity.error),
+      issue: TimecodeIssue(
+        message: 'Minutes must be 00–59.',
+        severity: TimecodeIssueSeverity.error,
+      ),
     );
   }
   if (seconds < 0 || seconds > 59) {
     return const TimecodeValidation(
       timecode: null,
-      issue: TimecodeIssue(message: 'Seconds must be 00–59.', severity: TimecodeIssueSeverity.error),
+      issue: TimecodeIssue(
+        message: 'Seconds must be 00–59.',
+        severity: TimecodeIssueSeverity.error,
+      ),
     );
   }
 
@@ -141,24 +144,36 @@ TimecodeValidation validateTimecode({
     );
   }
 
-  final tc = Timecode(hours: hours, minutes: minutes, seconds: seconds, frames: frames);
+  final tc = Timecode(
+    hours: hours,
+    minutes: minutes,
+    seconds: seconds,
+    frames: frames,
+  );
 
   if (isDropFrame) {
     if (!fpsMode.allowsDropFrame) {
       return const TimecodeValidation(
         timecode: null,
-        issue: TimecodeIssue(message: 'Drop-frame not supported for this FPS.', severity: TimecodeIssueSeverity.error),
+        issue: TimecodeIssue(
+          message: 'Drop-frame not supported for this FPS.',
+          severity: TimecodeIssueSeverity.error,
+        ),
       );
     }
 
     // DF legality (29.97 only in current scope): illegal labels at minute start except each 10th minute.
     final totalMinutes = hours * 60 + minutes;
-    final isIllegalMinuteStart = seconds == 0 && (frames == 0 || frames == 1) && (totalMinutes % 10 != 0);
+    final isIllegalMinuteStart =
+        seconds == 0 &&
+        (frames == 0 || frames == 1) &&
+        (totalMinutes % 10 != 0);
     if (isIllegalMinuteStart) {
       return TimecodeValidation(
         timecode: null,
         issue: TimecodeIssue(
-          message: 'Illegal DF label at minute start (use ;00 or ;01 only every 10th minute).',
+          message:
+              'Illegal DF label at minute start (use ;00 or ;01 only every 10th minute).',
           severity: TimecodeIssueSeverity.error,
         ),
       );
@@ -167,4 +182,3 @@ TimecodeValidation validateTimecode({
 
   return TimecodeValidation(timecode: tc, issue: null);
 }
-

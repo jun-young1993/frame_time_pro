@@ -102,8 +102,6 @@ class _PortraitLayout extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: const [
-          // TimecodeDisplaySection(),
-          // SizedBox(height: AppSpacing.x2),
           ConversionModeSection(),
           SizedBox(height: AppSpacing.x2),
           TimecodeInputSection(),

@@ -21,21 +21,41 @@ class FpsMode {
   /// Whether DF is a valid mode for this FPS.
   final bool allowsDropFrame;
 
-  static const fps23_976 = FpsMode._(label: '23.976', frameBase: 24, fpsReal: 23.976, allowsDropFrame: false);
-  static const fps24 = FpsMode._(label: '24', frameBase: 24, fpsReal: 24.0, allowsDropFrame: false);
-  static const fps25 = FpsMode._(label: '25', frameBase: 25, fpsReal: 25.0, allowsDropFrame: false);
-  static const fps29_97 = FpsMode._(label: '29.97', frameBase: 30, fpsReal: 29.97, allowsDropFrame: true);
-  static const fps30 = FpsMode._(label: '30', frameBase: 30, fpsReal: 30.0, allowsDropFrame: false);
+  static const fps23_976 = FpsMode._(
+    label: '23.976',
+    frameBase: 24,
+    fpsReal: 23.976,
+    allowsDropFrame: true,
+  );
+  static const fps24 = FpsMode._(
+    label: '24',
+    frameBase: 24,
+    fpsReal: 24.0,
+    allowsDropFrame: false,
+  );
+  static const fps25 = FpsMode._(
+    label: '25',
+    frameBase: 25,
+    fpsReal: 25.0,
+    allowsDropFrame: false,
+  );
+  static const fps29_97 = FpsMode._(
+    label: '29.97',
+    frameBase: 30,
+    fpsReal: 29.97,
+    allowsDropFrame: true,
+  );
+  static const fps30 = FpsMode._(
+    label: '30',
+    frameBase: 30,
+    fpsReal: 30.0,
+    allowsDropFrame: false,
+  );
 
-  static const values = <FpsMode>[
-    fps23_976,
-    fps24,
-    fps25,
-    fps29_97,
-    fps30,
-  ];
+  static const values = <FpsMode>[fps23_976, fps24, fps25, fps29_97, fps30];
 
   @override
   String toString() => 'FpsMode($label)';
-}
 
+  bool get isDropFrame => allowsDropFrame;
+}
