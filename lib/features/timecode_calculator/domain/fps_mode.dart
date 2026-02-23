@@ -25,7 +25,13 @@ class FpsMode {
     label: '23.976',
     frameBase: 24,
     fpsReal: 23.976,
-    allowsDropFrame: true,
+    allowsDropFrame: false,
+  );
+  static const fps23_98 = FpsMode._(
+    label: '23.98',
+    frameBase: 24,
+    fpsReal: 23.976,
+    allowsDropFrame: false,
   );
   static const fps24 = FpsMode._(
     label: '24',
@@ -51,8 +57,34 @@ class FpsMode {
     fpsReal: 30.0,
     allowsDropFrame: false,
   );
+  static const fps50 = FpsMode._(
+    label: '50',
+    frameBase: 50,
+    fpsReal: 50.0,
+    allowsDropFrame: false,
+  );
+  static const fps59_94 = FpsMode._(
+    label: '59.94',
+    frameBase: 60,
+    fpsReal: 59.94,
+    allowsDropFrame: true,
+  );
+  static const fps60 = FpsMode._(
+    label: '60',
+    frameBase: 60,
+    fpsReal: 60.0,
+    allowsDropFrame: false,
+  );
+  static const fps1000 = FpsMode._(
+    label: '1000',
+    frameBase: 1000,
+    fpsReal: 1000.0,
+    allowsDropFrame: false,
+  );
 
-  static const values = <FpsMode>[fps23_976, fps24, fps25, fps29_97, fps30];
+  static const values = <FpsMode>[
+    fps23_976, fps23_98, fps24, fps25, fps29_97, fps30, fps50, fps59_94, fps60, fps1000,
+  ];
 
   @override
   String toString() => 'FpsMode($label)';

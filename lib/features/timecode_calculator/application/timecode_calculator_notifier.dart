@@ -132,7 +132,7 @@ class TimecodeCalculatorNotifier extends StateNotifier<TimecodeCalculatorState> 
     final fps = old.fpsMode;
     final df = old.isDropFrame;
     final fpsReal = fps.fpsReal;
-
+    print('${mode} ${fps} ${df} ${fpsReal}');
     String display = '—';
     bool valid = false;
 

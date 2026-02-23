@@ -41,7 +41,7 @@ class TimecodeSegments {
   static const empty = TimecodeSegments(hh: '', mm: '', ss: '', ff: '');
 
   bool get isComplete =>
-      hh.length == 2 && mm.length == 2 && ss.length == 2 && ff.length == 2;
+      _disp2(hh).length == 2 && _disp2(mm).length == 2 && _disp2(ss).length == 2 && _disp2(ff).length == 2;
 
   String display({required bool isDropFrame}) {
     final sep = isDropFrame ? ';' : ':';
@@ -58,6 +58,8 @@ class TimecodeSegments {
   }
 
   static String _disp2(String value) => value.padLeft(2, '0');
+
+  
 }
 
 enum TimecodeIssueSeverity { warning, error }
@@ -98,36 +100,35 @@ TimecodeValidation validateTimecode({
           : null,
     );
   }
-
-  final hours = int.tryParse(segments.hh);
-  final minutes = int.tryParse(segments.mm);
-  final seconds = int.tryParse(segments.ss);
-  final frames = int.tryParse(segments.ff);
-
+  
+  final hours = int.tryParse(segments.hh.padLeft(2, '0'));
+  final minutes = int.tryParse(segments.mm.padLeft(2, '0'));
+  final seconds = int.tryParse(segments.ss.padLeft(2, '0'));
+  final frames = int.tryParse(segments.ff.padLeft(2, '0'));
   if (hours == null || minutes == null || seconds == null || frames == null) {
-    return const TimecodeValidation(
+    return TimecodeValidation(
       timecode: null,
       issue: TimecodeIssue(
-        message: 'Invalid digits.',
+        message: 'Invalid digits.: ${segments.display(isDropFrame: isDropFrame)}',
         severity: TimecodeIssueSeverity.error,
       ),
     );
   }
 
   if (minutes < 0 || minutes > 59) {
-    return const TimecodeValidation(
+    return TimecodeValidation(
       timecode: null,
       issue: TimecodeIssue(
-        message: 'Minutes must be 00–59.',
+        message: 'Minutes must be 00–59. : ${segments.display(isDropFrame: isDropFrame)}',
         severity: TimecodeIssueSeverity.error,
       ),
     );
   }
   if (seconds < 0 || seconds > 59) {
-    return const TimecodeValidation(
+    return TimecodeValidation(
       timecode: null,
       issue: TimecodeIssue(
-        message: 'Seconds must be 00–59.',
+        message: 'Seconds must be 00–59. ${segments.display(isDropFrame: isDropFrame)}',
         severity: TimecodeIssueSeverity.error,
       ),
     );
@@ -138,7 +139,7 @@ TimecodeValidation validateTimecode({
     return TimecodeValidation(
       timecode: null,
       issue: TimecodeIssue(
-        message: 'Frames must be 00–${maxFrame.toString().padLeft(2, '0')}.',
+        message: 'Frames must be 00–${maxFrame.toString().padLeft(2, '0')}. : ${segments.display(isDropFrame: isDropFrame)}',
         severity: TimecodeIssueSeverity.error,
       ),
     );
