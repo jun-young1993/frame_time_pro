@@ -11,6 +11,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 ///
 /// 실제 AdMob 광고 단위 ID는 출시 전 [_adUnitId]를 교체해야 한다.
 class BannerAdWidget extends StatefulWidget {
+
   const BannerAdWidget({super.key});
 
   @override
@@ -74,6 +75,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    
     if (!_isLoaded || _bannerAd == null) {
       return const SizedBox.shrink();
     }
