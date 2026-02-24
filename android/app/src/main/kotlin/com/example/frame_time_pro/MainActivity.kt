@@ -1,4 +1,4 @@
-package com.example.frame_time_pro
+package juny.frame_time_pro
 
 import io.flutter.embedding.android.FlutterActivity
 

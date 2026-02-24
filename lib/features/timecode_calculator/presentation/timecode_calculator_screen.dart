@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/app_breakpoints.dart';
 import '../../../core/constants/app_spacing.dart';
+import '../../../core/widgets/banner_ad_widget.dart';
 import '../application/timecode_calculator_notifier.dart';
 import 'sections/conversion_mode_section.dart';
 import 'sections/frame_rate_selector_section.dart';
@@ -34,8 +35,10 @@ class TimecodeCalculatorScreen extends ConsumerWidget {
           child: _StatusStrip(left: statusLeft, right: statusRight),
         ),
       ),
+      bottomNavigationBar: const BannerAdWidget(),
       body: SafeArea(
         top: false,
+        bottom: false,
         child: Padding(
           padding: AppSpacing.screenPadding,
           child: LayoutBuilder(
