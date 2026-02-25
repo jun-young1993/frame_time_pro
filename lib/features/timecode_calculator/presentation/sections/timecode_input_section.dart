@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/constants/app_breakpoints.dart';
+import '../../../../core/constants/app_scale.dart';
 import '../../../../core/widgets/app_section_container.dart';
 import '../../application/timecode_calculator_notifier.dart';
 import '../../application/timecode_calculator_state.dart';
@@ -67,14 +69,17 @@ class TimecodeInputSection extends ConsumerWidget {
       );
     }
 
+    final isTablet = AppBreakpoints.isTablet(MediaQuery.sizeOf(context).width);
+    final pad = AppScale.sectionPadding(isTablet);
+
     return AppSectionContainer(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(pad),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(title, style: textTheme.titleMedium),
-            const SizedBox(height: 12),
+            Text(title, style: AppScale.sectionTitle(textTheme, isTablet)),
+            SizedBox(height: AppScale.gap(isTablet)),
             inputWidget,
             const SizedBox(height: 8),
             Text(

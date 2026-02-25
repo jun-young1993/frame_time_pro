@@ -9,7 +9,9 @@
       "Bash(cd \"C:\\\\Users\\\\junyoung\\\\junyoung\\\\source\\\\frame_time_pro\" && flutter analyze 2>&1)",
       "Bash(cd \"C:\\\\Users\\\\junyoung\\\\junyoung\\\\source\\\\frame_time_pro\" && flutter pub get 2>&1 && flutter analyze lib/core/ads/app_open_ad_manager.dart lib/main.dart 2>&1)",
       "Bash(grep google_mobile_ads:*)",
-      "Bash(cd \"C:\\\\Users\\\\junyoung\\\\junyoung\\\\source\\\\frame_time_pro\" && flutter analyze lib/core/ads/app_open_ad_manager.dart lib/main.dart 2>&1)"
+      "Bash(cd \"C:\\\\Users\\\\junyoung\\\\junyoung\\\\source\\\\frame_time_pro\" && flutter analyze lib/core/ads/app_open_ad_manager.dart lib/main.dart 2>&1)",
+      "Bash(tail:*)",
+      "Bash(flutter analyze:*)"
     ]
   }
 }

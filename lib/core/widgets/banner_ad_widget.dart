@@ -75,7 +75,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
-    
+    return const SizedBox.shrink();
     if (!_isLoaded || _bannerAd == null) {
       return const SizedBox.shrink();
     }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/constants/app_breakpoints.dart';
+import '../../../../core/constants/app_scale.dart';
 import '../../../../core/widgets/app_section_container.dart';
 import '../../application/timecode_calculator_notifier.dart';
 import '../../domain/fps_mode.dart';
@@ -13,24 +15,28 @@ class FrameRateSelectorSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final isTablet = AppBreakpoints.isTablet(MediaQuery.sizeOf(context).width);
 
     final fpsMode = ref.watch(timecodeCalculatorProvider.select((s) => s.fpsMode));
     final isDropFrame = ref.watch(timecodeCalculatorProvider.select((s) => s.isDropFrame));
     final allowsDf = fpsMode.allowsDropFrame;
 
+    final pad = AppScale.sectionPadding(isTablet);
+    final spacing = AppScale.chipSpacing(isTablet);
+
     return AppSectionContainer(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(pad),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Frame rate', style: textTheme.titleMedium),
-            const SizedBox(height: 12),
+            Text('Frame rate', style: AppScale.sectionTitle(textTheme, isTablet)),
+            SizedBox(height: AppScale.gap(isTablet)),
             Semantics(
               label: 'Frame rate selector',
               child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
+                spacing: spacing,
+                runSpacing: spacing,
                 children: [
                   for (final mode in FpsMode.values)
                     ChoiceChip(
@@ -44,7 +50,7 @@ class FrameRateSelectorSection extends ConsumerWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: AppScale.gap(isTablet)),
             Row(
               children: [
                 Expanded(

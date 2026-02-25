@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/constants/app_breakpoints.dart';
+import '../../../../core/constants/app_scale.dart';
 import '../../../../core/widgets/app_section_container.dart';
 import '../../application/timecode_calculator_notifier.dart';
 import '../../application/timecode_calculator_state.dart';
@@ -12,23 +14,27 @@ class ConversionModeSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
+    final isTablet = AppBreakpoints.isTablet(MediaQuery.sizeOf(context).width);
     final selected = ref.watch(
       timecodeCalculatorProvider.select((s) => s.conversionMode),
     );
 
+    final pad = AppScale.sectionPadding(isTablet);
+    final spacing = AppScale.chipSpacing(isTablet);
+
     return AppSectionContainer(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(pad),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Conversion', style: textTheme.titleMedium),
-            const SizedBox(height: 12),
+            Text('Conversion', style: AppScale.sectionTitle(textTheme, isTablet)),
+            SizedBox(height: AppScale.gap(isTablet)),
             Semantics(
               label: 'Conversion mode',
               child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
+                spacing: spacing,
+                runSpacing: spacing,
                 children: ConversionMode.values.map((mode) {
                   final isSelected = mode == selected;
                   return FilterChip(

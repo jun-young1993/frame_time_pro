@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/app_breakpoints.dart';
+import '../../../core/constants/app_scale.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/widgets/banner_ad_widget.dart';
 import '../application/timecode_calculator_notifier.dart';
@@ -16,6 +17,8 @@ class TimecodeCalculatorScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isTablet = AppBreakpoints.isTablet(MediaQuery.sizeOf(context).width);
+
     final statusLeft = ref.watch(
       timecodeCalculatorProvider.select((s) => s.statusFpsLabel),
     );
@@ -31,7 +34,7 @@ class TimecodeCalculatorScreen extends ConsumerWidget {
           // IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(36),
+          preferredSize: Size.fromHeight(AppScale.statusStripHeight(isTablet)),
           child: _StatusStrip(left: statusLeft, right: statusRight),
         ),
       ),
@@ -124,30 +127,36 @@ class _WideLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ConversionModeSection(),
-              SizedBox(height: AppSpacing.x2),
-              TimecodeInputSection(),
-              SizedBox(height: AppSpacing.x2),
-              FrameRateSelectorSection(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: const [
+                ConversionModeSection(),
+                SizedBox(height: AppSpacing.x2),
+                TimecodeInputSection(),
+                SizedBox(height: AppSpacing.x2),
+                FrameRateSelectorSection(),
+                SizedBox(height: AppSpacing.x6),
+              ],
+            ),
           ),
         ),
-        SizedBox(width: AppSpacing.x2),
+        const SizedBox(width: AppSpacing.x2),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TimecodeDisplaySection(),
-              SizedBox(height: AppSpacing.x2),
-              ResultSection(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: const [
+                TimecodeDisplaySection(),
+                SizedBox(height: AppSpacing.x2),
+                ResultSection(),
+                SizedBox(height: AppSpacing.x6),
+              ],
+            ),
           ),
         ),
       ],
