@@ -4,8 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_breakpoints.dart';
 import '../../../core/constants/app_scale.dart';
 import '../../../core/constants/app_spacing.dart';
-import '../../../core/widgets/banner_ad_widget.dart';
+import 'package:flutter_ui_kit_google_mobile_ads/flutter_ui_kit_google_mobile_ads.dart';
 import '../application/timecode_calculator_notifier.dart';
+import '../../history/presentation/history_screen.dart';
 import 'sections/conversion_mode_section.dart';
 import 'sections/frame_rate_selector_section.dart';
 import 'sections/result_section.dart';
@@ -29,16 +30,25 @@ class TimecodeCalculatorScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Timecode Calculator'),
-        actions: const [
-          // Reserved for future settings / export / history.
-          // IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history),
+            tooltip: 'View history',
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const HistoryScreen()),
+            ),
+          ),
         ],
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(AppScale.statusStripHeight(isTablet)),
           child: _StatusStrip(left: statusLeft, right: statusRight),
         ),
       ),
-      bottomNavigationBar: const BannerAdWidget(),
+      bottomNavigationBar: BannerAdWidget(
+        androidId: 'ca-app-pub-4656262305566191/7150799760',
+        iosId:'ca-app-pub-4656262305566191/3002478255'
+      ),
       body: SafeArea(
         top: false,
         bottom: false,

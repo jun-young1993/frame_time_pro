@@ -122,6 +122,15 @@ class TimecodeCalculatorState {
 
   String get statusModeLabel => conversionMode.label;
 
+  /// 현재 변환 모드에 따른 입력값 표시 문자열.
+  String get inputDisplay {
+    if (conversionMode.inputIsTimecode) {
+      return inputA.segments.display(isDropFrame: isDropFrame);
+    }
+    if (conversionMode.inputIsFrame) return frameInput;
+    return secondInput;
+  }
+
   TimecodeCalculatorState copyWith({
     FpsMode? fpsMode,
     bool? isDropFrame,

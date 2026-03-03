@@ -7,6 +7,8 @@ import '../../../../core/constants/app_breakpoints.dart';
 import '../../../../core/constants/app_scale.dart';
 import '../../../../core/widgets/app_section_container.dart';
 import '../../application/timecode_calculator_notifier.dart';
+import '../../../history/application/history_notifier.dart';
+import '../../../history/domain/conversion_record.dart';
 
 class ResultSection extends ConsumerWidget {
   const ResultSection({super.key});
@@ -44,6 +46,28 @@ class ResultSection extends ConsumerWidget {
                         }
                       : null,
                   icon: const Icon(Icons.copy_outlined),
+                ),
+                IconButton(
+                  tooltip: 'Save to history',
+                  onPressed: result.isValid
+                      ? () async {
+                          final state = ref.read(timecodeCalculatorProvider);
+                          await ref.read(historyProvider.notifier).save(
+                                ConversionRecord(
+                                  conversionType: state.statusModeLabel,
+                                  inputValue: state.inputDisplay,
+                                  outputValue: state.result.display,
+                                  timestamp: DateTime.now(),
+                                ),
+                              );
+                          HapticFeedback.lightImpact();
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Saved to history')),
+                          );
+                        }
+                      : null,
+                  icon: const Icon(Icons.bookmark_add_outlined),
                 ),
               ],
             ),
