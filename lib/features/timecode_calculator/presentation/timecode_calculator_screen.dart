@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_ui_kit_setting/flutter_ui_kit_setting.dart';
+import 'package:flutter_ui_kit_theme/flutter_ui_kit_theme.dart';
+import 'package:frame_time_pro/features/setting/setting_screen.dart';
 
-import '../../../core/constants/app_breakpoints.dart';
-import '../../../core/constants/app_scale.dart';
-import '../../../core/constants/app_spacing.dart';
+// import '../../../core/constants/app_breakpoints.dart';
+// import '../../../core/constants/app_scale.dart';
+// import '../../../core/constants/app_spacing.dart';
 import 'package:flutter_ui_kit_google_mobile_ads/flutter_ui_kit_google_mobile_ads.dart';
 import '../application/timecode_calculator_notifier.dart';
 import '../../history/presentation/history_screen.dart';
@@ -14,7 +17,32 @@ import 'sections/timecode_display_section.dart';
 import 'sections/timecode_input_section.dart';
 
 class TimecodeCalculatorScreen extends ConsumerWidget {
-  const TimecodeCalculatorScreen({super.key});
+  const TimecodeCalculatorScreen({
+    super.key,    
+    required this.themeMode,
+    required this.onThemeModeChanged,
+    required this.brand,
+    required this.onBrandToggled
+  });
+
+  final ThemeMode themeMode;
+  final ValueChanged<ThemeMode> onThemeModeChanged;
+  final DsBrand brand;
+  final ValueChanged<DsBrand> onBrandToggled;
+
+  void _openSettings(BuildContext context){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => 
+        AppSettingScreen(
+          themeMode: themeMode, 
+          onThemeModeChanged: onThemeModeChanged, 
+          brand: brand, 
+          onBrandChanged: onBrandToggled
+        )
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,6 +67,10 @@ class TimecodeCalculatorScreen extends ConsumerWidget {
               MaterialPageRoute(builder: (_) => const HistoryScreen()),
             ),
           ),
+          SettingGearButton(
+            animate: true,
+            onPressed: () => _openSettings(context)
+          )
         ],
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(AppScale.statusStripHeight(isTablet)),

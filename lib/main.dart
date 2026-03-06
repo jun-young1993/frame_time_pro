@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_ui_kit_theme/flutter_ui_kit_theme.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_ui_kit_google_mobile_ads/flutter_ui_kit_google_mobile_ads.dart';
 
@@ -26,21 +27,48 @@ void main() async {
 
   AppOpenAdManager.instance.loadAd();
 
-  runApp(const ProviderScope(child: MyApp()));
+  
+
+  runApp(ProviderScope(child: _MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class _MyApp extends StatefulWidget {
+  const _MyApp();
+
+  @override
+  State<_MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<_MyApp> {
+ 
+  final controller = DsThemeController();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.init();
+  }
+  
 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) {
-        return MaterialApp(
+        return DsThemeBuilder(
+          controller: controller, 
+          builder: (light, dark, mode, brand) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: AppTheme.dark(),
-          home: TimecodeCalculatorScreen(),
+          themeMode: mode,
+          theme: light,
+          darkTheme: dark,
+          home: TimecodeCalculatorScreen(
+            themeMode: mode,
+            onThemeModeChanged: (theme) =>  controller.setThemeMode(theme),
+            brand: brand,
+            onBrandToggled: (brand) => controller.setBrand(brand),
+          ),
+        )
         );
       },
     );

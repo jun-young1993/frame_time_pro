@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_ui_kit_theme/flutter_ui_kit_theme.dart';
 
-import '../../../../core/constants/app_breakpoints.dart';
-import '../../../../core/constants/app_scale.dart';
 import '../../../../core/widgets/app_section_container.dart';
 import '../../application/timecode_calculator_notifier.dart';
 import '../../application/timecode_calculator_state.dart';
