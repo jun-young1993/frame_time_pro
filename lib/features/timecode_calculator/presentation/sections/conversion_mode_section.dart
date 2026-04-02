@@ -13,6 +13,7 @@ class ConversionModeSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
+    final scheme = Theme.of(context).colorScheme;
     final isTablet = AppBreakpoints.isTablet(MediaQuery.sizeOf(context).width);
     final selected = ref.watch(
       timecodeCalculatorProvider.select((s) => s.conversionMode),
