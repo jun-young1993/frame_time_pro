@@ -113,8 +113,26 @@ class _TimecodeKeypadBottomSheetState extends State<TimecodeKeypadBottomSheet> {
               children: [
                 Expanded(
                   child: OutlinedButton(
+                    onPressed: () => _stepByFrames(-10, shouldAnimate: true),
+                    child: const Text('-10F'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: OutlinedButton(
                     onPressed: () => _stepByFrames(10, shouldAnimate: true),
                     child: const Text('+10F'),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => _stepByFrames(-widget.fpsMode.frameBase, shouldAnimate: true),
+                    child: const Text('-1S'),
                   ),
                 ),
                 const SizedBox(width: 12),

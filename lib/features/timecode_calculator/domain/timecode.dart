@@ -115,6 +115,15 @@ TimecodeValidation validateTimecode({
     );
   }
 
+  if (hours < 0) {
+    return TimecodeValidation(
+      timecode: null,
+      issue: TimecodeIssue(
+        message: 'Hours must be 00 or greater.: ${segments.display(isDropFrame: isDropFrame)}',
+        severity: TimecodeIssueSeverity.error,
+      ),
+    );
+  }
   if (minutes < 0 || minutes > 59) {
     return TimecodeValidation(
       timecode: null,

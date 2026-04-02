@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../timecode_calculator/application/timecode_calculator_notifier.dart';
+import '../../timecode_calculator/application/timecode_calculator_state.dart';
+import '../../timecode_calculator/domain/timecode.dart';
 import '../application/history_notifier.dart';
 import '../domain/conversion_record.dart';
 
@@ -110,8 +113,48 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       itemBuilder: (_, i) => _HistoryItem(
         record: items[i],
         onDelete: () => notifier.delete(items[i]),
+        onLoad: () => _loadIntoCalculator(context, items[i]),
       ),
     );
+  }
+
+  void _loadIntoCalculator(BuildContext context, ConversionRecord record) {
+    final notifier = ref.read(timecodeCalculatorProvider.notifier);
+
+    // conversionType 라벨로 ConversionMode 복원, 미매칭 시 fallback
+    final mode = ConversionMode.values.firstWhere(
+      (m) => m.label == record.conversionType,
+      orElse: () => ConversionMode.frameToTimecode,
+    );
+    notifier.setConversionMode(mode);
+
+    if (mode.inputIsTimecode) {
+      notifier.setInputSegments(
+        _parseTimecodeSegments(record.inputValue),
+        isCommit: true,
+        shouldAnimateResult: true,
+      );
+    } else if (mode.inputIsFrame) {
+      notifier.setFrameInput(record.inputValue);
+    } else {
+      notifier.setSecondInput(record.inputValue);
+    }
+
+    Navigator.of(context).pop();
+  }
+
+  /// "HH:MM:SS:FF" 또는 "HH:MM:SS;FF" 형식을 TimecodeSegments로 파싱.
+  TimecodeSegments _parseTimecodeSegments(String value) {
+    final parts = value.replaceAll(';', ':').split(':');
+    if (parts.length == 4) {
+      return TimecodeSegments(
+        hh: parts[0].padLeft(2, '0'),
+        mm: parts[1].padLeft(2, '0'),
+        ss: parts[2].padLeft(2, '0'),
+        ff: parts[3].padLeft(2, '0'),
+      );
+    }
+    return TimecodeSegments.empty;
   }
 
   Future<void> _confirmClear(
@@ -184,10 +227,15 @@ class _SearchBar extends StatelessWidget {
 // ──────────────────────────────────────────────
 
 class _HistoryItem extends StatelessWidget {
-  const _HistoryItem({required this.record, required this.onDelete});
+  const _HistoryItem({
+    required this.record,
+    required this.onDelete,
+    required this.onLoad,
+  });
 
   final ConversionRecord record;
   final VoidCallback onDelete;
+  final VoidCallback onLoad;
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +253,7 @@ class _HistoryItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── 헤더: 타입 칩 + 시각 + 삭제 ──
+            // ── 헤더: 타입 칩 + 시각 + 로드 + 삭제 ──
             Row(
               children: [
                 _TypeChip(
@@ -221,6 +269,18 @@ class _HistoryItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 4),
+                GestureDetector(
+                  onTap: onLoad,
+                  child: Tooltip(
+                    message: 'Load into calculator',
+                    child: Icon(
+                      Icons.upload_outlined,
+                      size: 16,
+                      color: scheme.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
                 GestureDetector(
                   onTap: onDelete,
                   child: Icon(

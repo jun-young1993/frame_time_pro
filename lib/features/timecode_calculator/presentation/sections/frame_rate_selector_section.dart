@@ -39,7 +39,7 @@ class FrameRateSelectorSection extends ConsumerWidget {
                 children: [
                   for (final mode in FpsMode.values)
                     ChoiceChip(
-                      label: Text(mode.label),
+                      label: Text(mode.label, style: textTheme.labelLarge?.copyWith(color: scheme.primary)),
                       selected: mode.label == fpsMode.label,
                       onSelected: (_) {
                         HapticFeedback.selectionClick();

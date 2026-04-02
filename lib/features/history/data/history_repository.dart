@@ -15,6 +15,11 @@ class HistoryRepository {
 
   Future<void> save(ConversionRecord record) async {
     await _box.add(record);
+    if (_box.length > 200) {
+      final toDelete = _box.length - 200;
+      final keysToDelete = _box.keys.take(toDelete).toList();
+      await _box.deleteAll(keysToDelete);
+    }
   }
 
   /// 최신순으로 반환.

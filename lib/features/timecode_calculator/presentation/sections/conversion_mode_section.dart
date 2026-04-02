@@ -17,6 +17,7 @@ class ConversionModeSection extends ConsumerWidget {
     final selected = ref.watch(
       timecodeCalculatorProvider.select((s) => s.conversionMode),
     );
+    final scheme = Theme.of(context).colorScheme;
 
     final pad = AppScale.sectionPadding(isTablet);
     final spacing = AppScale.chipSpacing(isTablet);
@@ -37,7 +38,7 @@ class ConversionModeSection extends ConsumerWidget {
                 children: ConversionMode.values.map((mode) {
                   final isSelected = mode == selected;
                   return FilterChip(
-                    label: Text(mode.label),
+                    label: Text(mode.label, style: textTheme.labelLarge?.copyWith(color: scheme.primary)),
                     selected: isSelected,
                     onSelected: (_) {
                       HapticFeedback.selectionClick();

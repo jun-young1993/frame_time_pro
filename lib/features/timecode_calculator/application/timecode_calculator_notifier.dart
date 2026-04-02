@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../data/calculator_settings_repository.dart';
 import '../domain/fps_mode.dart';
 import '../domain/timecode.dart';
 import '../domain/timecode_math.dart';
@@ -11,12 +12,32 @@ final timecodeCalculatorProvider =
 );
 
 class TimecodeCalculatorNotifier extends StateNotifier<TimecodeCalculatorState> {
-  TimecodeCalculatorNotifier() : super(TimecodeCalculatorState.initial) {
+  TimecodeCalculatorNotifier() : super(_loadInitialState()) {
     _recompute(shouldAnimate: false);
+  }
+
+  final _repo = CalculatorSettingsRepository();
+
+  static TimecodeCalculatorState _loadInitialState() {
+    final repo = CalculatorSettingsRepository();
+    final fpsMode = repo.loadFpsMode();
+    final isDropFrame = fpsMode.allowsDropFrame ? repo.loadDropFrame() : false;
+    final mode = repo.loadConversionMode();
+    return TimecodeCalculatorState(
+      fpsMode: fpsMode,
+      isDropFrame: isDropFrame,
+      conversionMode: mode,
+      inputA: TimecodeInputModel.empty,
+      frameInput: '',
+      secondInput: '',
+      result: TimecodeResultModel.invalid,
+      resultAnimationNonce: 0,
+    );
   }
 
   void setConversionMode(ConversionMode mode) {
     state = state.copyWith(conversionMode: mode);
+    _repo.saveConversionMode(mode);
     _recompute(shouldAnimate: true);
   }
 
@@ -34,6 +55,8 @@ class TimecodeCalculatorNotifier extends StateNotifier<TimecodeCalculatorState> 
       isDropFrame: nextDropFrame,
       inputA: nextA,
     );
+    _repo.saveFpsMode(fpsMode);
+    _repo.saveDropFrame(nextDropFrame);
     _recompute(shouldAnimate: true);
   }
 
@@ -46,6 +69,7 @@ class TimecodeCalculatorNotifier extends StateNotifier<TimecodeCalculatorState> 
       isDropFrame,
     );
     state = old.copyWith(isDropFrame: isDropFrame, inputA: nextA);
+    _repo.saveDropFrame(isDropFrame);
     _recompute(shouldAnimate: true);
   }
 
@@ -132,7 +156,6 @@ class TimecodeCalculatorNotifier extends StateNotifier<TimecodeCalculatorState> 
     final fps = old.fpsMode;
     final df = old.isDropFrame;
     final fpsReal = fps.fpsReal;
-    print('${mode} ${fps} ${df} ${fpsReal}');
     String display = '—';
     bool valid = false;
 

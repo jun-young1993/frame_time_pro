@@ -12,7 +12,9 @@
       "Bash(cd \"C:\\\\Users\\\\junyoung\\\\junyoung\\\\source\\\\frame_time_pro\" && flutter analyze lib/core/ads/app_open_ad_manager.dart lib/main.dart 2>&1)",
       "Bash(tail:*)",
       "Bash(flutter analyze:*)",
-      "Bash(flutter pub:*)"
+      "Bash(flutter pub:*)",
+      "Skill(plan-ceo-review)",
+      "Bash(flutter test:*)"
     ]
   }
 }

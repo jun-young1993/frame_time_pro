@@ -41,18 +41,9 @@ dependencies:
   timecode: ^0.4.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  flutter_ui_kit_google_mobile_ads:
-    git:
-      url: https://github.com/jun-young1993/flutter_ui_kit.git
-      path: packages/flutter_ui_kit_google_mobile_ads
-  flutter_ui_kit_setting:
-    git:
-      url: https://github.com/jun-young1993/flutter_ui_kit.git
-      path: packages/flutter_ui_kit_setting
-  flutter_ui_kit_theme:
-    git:
-        url: https://github.com/jun-young1993/flutter_ui_kit.git
-        path: packages/flutter_ui_kit_theme
+  flutter_ui_kit_google_mobile_ads: ^0.1.18
+  flutter_ui_kit_setting: ^0.1.19
+  flutter_ui_kit_theme: ^0.1.19
 
 dev_dependencies:
   flutter_test:

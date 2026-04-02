@@ -9,6 +9,7 @@ import 'package:flutter_ui_kit_google_mobile_ads/flutter_ui_kit_google_mobile_ad
 
 import 'core/theme/app_theme.dart';
 import 'features/history/data/history_repository.dart';
+import 'features/timecode_calculator/data/calculator_settings_repository.dart';
 import 'features/timecode_calculator/presentation/timecode_calculator_screen.dart';
 
 
@@ -16,6 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await HistoryRepository.init();
+  await CalculatorSettingsRepository.init();
 
   // 초기 광고 로드 (콜드 스타트 시 첫 포그라운드에서 바로 표시 가능하도록)
   await GlobalAdConfig().initialize();
@@ -57,15 +59,16 @@ class _MyAppState extends State<_MyApp> {
       builder: (context, child) {
         return DsThemeBuilder(
           controller: controller, 
-          builder: (light, dark, mode, brand) => MaterialApp(
+          child: child,
+          builder: (theme, child) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          themeMode: mode,
-          theme: light,
-          darkTheme: dark,
+          themeMode: theme.themeMode,
+          theme: theme.lightTheme,
+          darkTheme: theme.darkTheme,
           home: TimecodeCalculatorScreen(
-            themeMode: mode,
+            themeMode: theme.themeMode,
             onThemeModeChanged: (theme) =>  controller.setThemeMode(theme),
-            brand: brand,
+            brand: theme.brand,
             onBrandToggled: (brand) => controller.setBrand(brand),
           ),
         )
