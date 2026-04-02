@@ -18,7 +18,7 @@ class ConversionModeSection extends ConsumerWidget {
     final selected = ref.watch(
       timecodeCalculatorProvider.select((s) => s.conversionMode),
     );
-    final scheme = Theme.of(context).colorScheme;
+
 
     final pad = AppScale.sectionPadding(isTablet);
     final spacing = AppScale.chipSpacing(isTablet);
