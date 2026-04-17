@@ -21,7 +21,7 @@ void main() async {
 
   // 초기 광고 로드 (콜드 스타트 시 첫 포그라운드에서 바로 표시 가능하도록)
   await GlobalAdConfig().initialize();
-  GlobalAdConfig().setAdVisibility(false);
+  // GlobalAdConfig().setAdVisibility(false);
   AppOpenAdManager.instance.configure(
     androidId: 'ca-app-pub-4656262305566191/6332542118',
     iosId: 'ca-app-pub-4656262305566191/3218100671'
